@@ -1,0 +1,282 @@
+@import "../../../styles/variables";
+@import "../../../shared/config-panel/panel-host-styles";
+@import "../../../shared/config-panel/panel-styles";
+
+$background-color: #fafafa;
+$part-indent: 16px;
+
+:host {
+  position: relative;
+  flex: 1 1 auto;
+  flex-direction: row;
+  width: calc(100% - 5px);
+}
+
+.panel {
+  flex: 1 1 30%;
+  overflow: hidden;
+  display: flex;
+
+  &:not(:last-child) {
+    border-right: thin solid $border-color;
+  }
+
+  &.tor-columns {
+    .column-container.last-column {
+      border-right: thin solid $border-color;
+    }
+  }
+
+  .panel-title {
+    justify-content: center;
+  }
+
+
+  .parts-items {
+    position: relative;
+    min-height: 72px;
+    height: 72px;
+
+    ::ng-deep > .mat-list-item-content {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+    }
+
+    .single-item {
+      padding-left: $part-indent;
+      padding-right: $part-indent;
+      width: 100%;
+
+      &.checked-item {
+        padding-right: 8px;
+
+        .unit-availability {
+          margin-right: 8px;
+        }
+      }
+    }
+
+    .part-expandable {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding-left: $part-indent;
+      padding-right: 10px;
+
+      &:hover {
+        cursor: pointer;
+        background: rgba(0, 0, 0, .04);
+      }
+
+      .inner-wrapper {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .part-header {
+        padding-left: $part-indent;
+        padding-right: $part-indent;
+        min-height: 71px;
+
+        ::ng-deep {
+          .mat-content {
+            display: block;
+          }
+        }
+      }
+
+      .expanded-parts-list {
+        padding-top: 0;
+        border-top: thin solid $border-color;
+
+        .mat-list-item {
+          height: 72px;
+        }
+
+        ::ng-deep .mat-list-item-content {
+          padding-left: $part-indent;
+          padding-right: $part-indent;
+        }
+      }
+    }
+  }
+}
+
+.column-container {
+  max-width: 330px;
+
+  .panel-content {
+    .mat-nav-list {
+      height: 100%;
+
+      .mat-list-item-content {
+        padding: 0 $part-indent;
+      }
+    }
+  }
+}
+
+
+.row-header {
+  display: flex;
+
+  .panel-header {
+    // min-width: 300px; - removed header min-width
+    min-width: auto;
+  }
+}
+
+.highlight-bg {
+  background-color: $background-color;
+
+  ::ng-deep .mat-expansion-panel {
+    background-color: $background-color;
+
+  }
+}
+
+.parts-list {
+  padding-top: 0;
+}
+
+.mat-icon-button.primary {
+  color: $primary !important;
+}
+
+.unit-info-wrapper {
+  display: flex;
+}
+
+.amount-input {
+  flex-basis: 0;
+  display: flex;
+  align-items: center;
+  margin-right: $part-indent;
+  .mat-icon-button {
+    @media (max-width: $small-screen-endpoint) {
+      width: 30px;
+    }
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  input {
+    text-align: center;
+  }
+
+  .mat-form-field {
+    min-width: 45px;
+    font-style: inherit;
+    @media (max-width: 1 $small-screen-endpoint) {
+      min-width: 45px;
+    }
+  }
+}
+
+
+::ng-deep .expanded-parts {
+  max-width: 100% !important;
+
+  .mat-menu-content {
+    padding: 0 !important;
+  }
+
+  .mat-menu-item {
+    line-height: inherit;
+    height: 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: $part-indent;
+    padding-right: $part-indent;
+    border-bottom: thin solid $border-color;
+
+    &:hover {
+      cursor: default;
+      background: inherit;
+    }
+
+    .item-title {
+      font-size: 16px;
+    }
+
+    .item-description {
+      color: #9d9d9d;
+    }
+
+  }
+}
+
+
+::ng-deep {
+  .single-item, .mat-menu-content {
+    .part-item {
+      max-width: 100% !important;
+    }
+  }
+
+  .ps-show-always .ps__rail-x {
+    left: 0 !important;
+  }
+}
+
+::ng-deep .part-item {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  max-width: calc(100% - 40px);
+
+  .detailed-info-btn {
+    color: #dbdbdb !important;
+
+    .mat-button-wrapper {
+      line-height: 0;
+      display: block;
+    }
+
+    .mat-button-focus-overlay{
+      opacity: 0 !important;
+    }
+  }
+
+
+  mat-checkbox {
+    margin-right: $part-indent;
+  }
+
+  .unit-info {
+    padding-right: $part-indent;
+  }
+
+  .unit-availability {
+    color: $primary;
+    white-space: nowrap;
+    margin-left: auto;
+    min-width: 85px;
+    width: 100%;
+  }
+
+  .unit-qty {
+    display: flex !important;
+    justify-content: space-between;
+  }
+
+  .unit-bo {
+    padding-left: 8px;
+  }
+
+  .unit-price {
+    font-size: 16px;
+  }
+}

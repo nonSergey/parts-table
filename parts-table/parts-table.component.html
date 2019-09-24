@@ -1,0 +1,109 @@
+<div class="panel tor-columns">
+
+  <div class="column-container" *ngFor="let torId of torColumns; odd as isOdd; last as isLast"
+       [ngClass]="{'last-column': isLast}">
+    <div class="row-header">
+
+      <div class="panel-header" [ngClass]="{'highlight-bg': isOdd}">
+        <div class="panel-title">
+          <h4>{{torsById[torId]?.title}}</h4>
+        </div>
+      </div>
+    </div>
+    
+    <div class="panel-content">
+
+      <mat-list class="parts-list" [ngClass]="{'highlight-bg': isOdd}">
+
+        <ng-container *ngFor="let category of categories; index as index">
+
+          <mat-list-item
+            *ngIf="partsMatrix[torId] && partsMatrix[torId][category.categoryId] && partsMatrix[torId][category.categoryId].included; else dummyItem"
+            class="parts-items">
+
+
+            <ng-container
+              *ngTemplateOutlet="partItem; context: {
+                        part: partsMatrix[torId][category.categoryId].included[0],
+                        parts: partsMatrix[torId][category.categoryId],
+                        category: category,
+                        torId: torId,
+                        isPartSelected: isSelected(category, torId, partsMatrix[torId][category.categoryId].included[0]),
+                        isPartChecked: isChecked(category, torId, partsMatrix[torId][category.categoryId].included[0])
+                      }"></ng-container>
+
+
+            <ng-template #partItem
+                         let-category="category"
+                         let-torId="torId"
+                         let-part="part"
+                         let-parts="parts"
+                         let-isPartSelected="isPartSelected"
+                         let-isPartChecked="isPartChecked">
+              <div class="single-item" [ngClass]="{'checked-item': isPartChecked}">
+                <div class="part-item">
+                  <mat-checkbox color="warn"
+                                (click)="$event.stopPropagation()"
+                                [checked]="isPartSelected"
+                                (change)="onPartSelectionChanged($event, category, torId, part, parts)">
+                  </mat-checkbox>
+                  <div class="amount-input" (click)="stopPropagation($event)">
+                    <mat-form-field appearance="outline" *ngIf="!isPartSelected">
+                      <input type="number" matInput [disabled]="true"
+                             value="0"
+                             autocomplete="off">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" *ngIf="isPartSelected">
+                      <input type="number"
+                             matInput
+                             min="0"
+                             [ngModel]="selectedParts.get(getUKey(category.categoryId, torId, part)).qty"
+                             (ngModelChange)="qtyChanged($event)"
+                             autocomplete="off">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="unit-info text-ellipsis">
+                    <div matLine class="item-title text-ellipsis">
+                      {{ part.partNumber }} ({{ part.sOS }})
+                    </div>
+                    <div matLine
+                         class="item-description additional-info text-ellipsis">
+                      {{ part.partDescription || 'N/A' }}
+                    </div>
+                  </div>
+                  <div class="unit-info-wrapper" *ngIf="getCheckedPart(category, torId, part) as checkedPart">
+                    <div class="unit-availability">
+                      <div matLine class="unit-price">
+                        {{(checkedPart.partInfo?.unitSell || 0) | number}}
+                        {{customer.currency}}
+                      </div>
+                      <div matLine class="unit-qty">
+                        <span>Stock {{warehouse?.warehouse}}: {{checkedPart.partInfo?.qtyOnHand}}</span>
+                      </div>
+                    </div>
+                    <button class="detailed-info-btn" mat-icon-button *ngIf="parts"
+                            (click)="stopPropagation($event); showDetails(category, torId, checkedPart, parts)">
+                      <mat-icon>info</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </ng-template>
+          </mat-list-item>
+
+          <ng-template #dummyItem>
+            <mat-list-item>
+              <div matLine></div>
+              <div matLine></div>
+            </mat-list-item>
+          </ng-template>
+
+        </ng-container>
+
+      </mat-list>
+    </div>
+  </div>
+</div>
+
